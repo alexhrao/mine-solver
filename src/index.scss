@@ -1,0 +1,5 @@
+.game-board {
+    display: grid;
+    width: fit-content;
+    grid-template-columns: auto minmax(0,1fr);
+}

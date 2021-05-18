@@ -1,0 +1,61 @@
+/* MineBox */
+.mine-box {
+    width: 25px;
+    height: 25px;
+    border: 1px solid darkgray;
+    background-color: lightgray;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    * {
+        width: 100%;
+        text-align: center;
+    }
+    .b1 {
+        color: blue;
+    }
+    .b2 {
+        color: green;
+    }
+    .b3 {
+        color: red;
+    }
+    .b4 {
+        color: purple;
+    }
+    .b5 {
+        color: maroon;
+    }
+    .b6 {
+        color: turquoise;
+    }
+    .b7 {
+        color: black;
+    }
+    .b8 {
+        color: gray;
+    }
+    &.too-many {
+        background-color: yellow;
+    }
+    .mine-btn {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        display: none;
+        &.unknown {
+            display: block;
+        }
+        * {
+            display: none;
+        }
+        &.flagged * {
+            --fa-secondary-color: red;
+            display: block;
+        }
+        border: none;
+        border-radius: 0;
+    }
+}
