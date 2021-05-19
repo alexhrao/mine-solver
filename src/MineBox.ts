@@ -12,6 +12,7 @@ export class MineBox {
     private contents: HTMLDivElement;
     private btn: HTMLButtonElement;
     private disabled: boolean = false;
+    private _isSwitched: boolean = false;
 
     constructor(private _box: Box, private readonly handlers: Handlers, public readonly parent: HTMLDivElement) {
         this.container = document.createElement('div');
@@ -46,7 +47,7 @@ export class MineBox {
             if (this.disabled) {
                 return;
             }
-            if (e.shiftKey) {
+            if ((e.shiftKey && !this._isSwitched) || (!e.shiftKey && this._isSwitched)) {
                 handlers.onrclick(this);
             } else {
                 handlers.onclickup(this);
@@ -60,6 +61,19 @@ export class MineBox {
 
     public get box(): Box {
         return this._box;
+    }
+
+    public get isSwitched(): boolean {
+        return this._isSwitched;
+    }
+
+    public set isSwitched(sw: boolean) {
+        if (sw) {
+            this.btn.classList.add('switched');
+        } else {
+            this.btn.classList.remove('switched');
+        }
+        this._isSwitched = sw;
     }
 
     public click(): void {

@@ -54,7 +54,13 @@
         * {
             display: none;
         }
-        &.flagged * {
+        &.switched * {
+            --fa-primary-color: lightgray;
+            --fa-secondary-color: lightgray;
+            display: block;
+        }
+        &.flagged.flagged * {
+            --fa-primary-color: black;
             --fa-secondary-color: red;
             display: block;
         }

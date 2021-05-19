@@ -189,6 +189,23 @@ function createBombCounter(mines: number): HTMLParagraphElement {
     return counter;
 }
 
+function createSwitcher(boxes: MineBox[][]): HTMLLabelElement {
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+
+    check.onchange = () => {
+        if (check.checked) {
+            boxes.flat().forEach(mb => mb.isSwitched = true);
+        } else {
+            boxes.flat().forEach(mb => mb.isSwitched = false);
+        }
+    }
+    const label = document.createElement('label');
+    label.appendChild(check);
+    label.append('Click to Flag (Shift+Click to uncover)');
+    return label;
+}
+
 function explode(seed: GameSeed, board: PlayBoard): void {
     seed.undo.disabled = false;
     board.boxes.flat().forEach(mb => mb.disable());
@@ -588,6 +605,8 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         const game = setupGame(seed, [box.box.row, box.box.col]);
         board.container.replaceWith(game.board.container);
         game.board.boxes[box.box.row][box.box.col].click();
+        const switcher = createSwitcher(game.board.boxes);
+        seed.bombCounter.insertAdjacentElement('afterend', switcher);
 
         seed.undo.onclick = () => {
             if (exploded === undefined) {
@@ -611,6 +630,7 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
             window.clearInterval(timer);
             confetti.start();
         }
+
         return true;
     });
     root.appendChild(seed.indicator);
