@@ -274,6 +274,9 @@ function createBoard(seed: GameSeed, mines: Box[][], onclick?: (box: MineBox) =>
                 return;
             }
             smileFace(seed.indicator);
+            if (box.box.flagged) {
+                return;
+            }
             // if it's a bomb, die
             // if it's a number, just show
             // otherwise, if it's 0, then iteratively clear around us, until we hit numbers
