@@ -4,6 +4,7 @@ import { Confetti } from './Confetti';
 
 import './index.scss';
 
+// Add Font Awesome
 const script = document.createElement('script');
 script.src = 'https://kit.fontawesome.com/a927215a8a.js';
 script.crossOrigin = 'anonymous';
@@ -468,6 +469,33 @@ function setupGame(seed: GameSeed, startClick: [r: number, c: number]): Game {
     };
 }
 
+function createInsts(): HTMLDivElement {
+    const container = document.createElement('div');
+    container.id = 'instructs';
+
+    const title = document.createElement('h2');
+    title.textContent = 'Instructions';
+
+    const instHolder = document.createElement('ul');
+    const insts = [
+        'Click any square to get started',
+        'Each Square will contain either a bomb or a number',
+        'The number tells exactly how many of the adjacent squares contain a bomb',
+        'If you think a square contains a bomb, flag it (Shift+Click) to indicate so',
+        'Otherwise, click it to reveal the square\'s contents',
+        'Your goal is to clear the entire board, leaving only flags behind',
+    ];
+    insts.forEach((inst) => {
+        const li = document.createElement('li');
+        li.textContent = inst;
+        instHolder.appendChild(li);
+    });
+    
+    container.appendChild(title);
+    container.appendChild(instHolder);
+    return container;
+}
+
 function newGameMenu(rows: number, cols: number, mines: number): NewGameControls {
 
     const numRowsLabel = document.createElement('label');
@@ -528,7 +556,6 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
     if (document.querySelector('h1') === null) {
         const title = document.createElement('h1');
         title.textContent = 'Minesweeper Online';
-        title.title = 'Click to get started. Each square contains either a bomb or a number; the number tells you how many adjacent squares have a bomb. If you think a square has a bomb, flag it (Shift+Click); otherwise, click it to reveal. Your goal is to clear the entire board, leaving only flags behind';
         document.body.appendChild(title);
     }
     const confetti: Confetti = new Confetti();
@@ -628,6 +655,10 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         makeNewGame(rows, cols, mines);
     }
     root.appendChild(newGame.container);
+
+    const insts = createInsts();
+    root.appendChild(insts);
+
 
     window.onmouseup = () => {
         if (finished) {
