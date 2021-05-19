@@ -184,6 +184,7 @@ function createBombCounter(mines: number): HTMLParagraphElement {
     } else {
         counter.textContent = `${mines} Flags left (Shift+Click to flag)`;
     }
+    counter.title = 'Shift+Click to Flag';
     return counter;
 }
 
@@ -524,6 +525,7 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
     if (document.querySelector('h1') === null) {
         const title = document.createElement('h1');
         title.textContent = 'Minesweeper Online';
+        title.title = 'Click to get started. Each square contains either a bomb or a number; the number tells you how many adjacent squares have a bomb. If you think a square has a bomb, flag it (Shift+Click); otherwise, click it to reveal. Your goal is to clear the entire board, leaving only flags behind';
         document.body.appendChild(title);
     }
     const confetti: Confetti = new Confetti();
