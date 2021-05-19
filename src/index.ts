@@ -4,6 +4,11 @@ import { Confetti } from './Confetti';
 
 import './index.scss';
 
+const script = document.createElement('script');
+script.src = 'https://kit.fontawesome.com/a927215a8a.js';
+script.crossOrigin = 'anonymous';
+document.head.appendChild(script);
+
 interface GameSeed {
     rows: number;
     cols: number;
@@ -516,10 +521,18 @@ function newGameMenu(rows: number, cols: number, mines: number): NewGameControls
 }
 
 function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
+    if (document.querySelector('h1') === null) {
+        const title = document.createElement('h1');
+        title.textContent = 'Minesweeper Online';
+        document.body.appendChild(title);
+    }
     const confetti: Confetti = new Confetti();
     if (timer !== 0) {
         window.clearInterval(timer);
     }
+    const root = document.createElement('div');
+    root.id = 'root';
+    document.body.appendChild(root);
     exploded = undefined;
     finished = false;
     const seed: GameSeed = {
@@ -529,11 +542,6 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         indicator: createIndicator(),
         bombCounter: createBombCounter(mines),
         undo: createUndo(),
-    }
-
-    const root = document.querySelector('#root');
-    if (root === null) {
-        throw new Error("No root node found");
     }
     const menubar = document.createElement('div');
     menubar.classList.add('menubar');
@@ -566,7 +574,7 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         }, 1000);
         gameFinisher = () => {
             const timeString = timeDiffString(timeDiff(game.stats.start, new Date()));
-            const finish = `Congratulations! You flagged ${seed.mines} ${seed.mines === 1 ? 'mine' : 'mines'} with ${game.stats.undos} undos in ${timeString}!`;
+            const finish = `Congratulations! You flagged ${seed.mines} ${seed.mines === 1 ? 'mine' : 'mines'} using ${game.stats.undos} undos in ${timeString}!`;
             statShower.textContent = finish;
             window.clearInterval(timer);
             confetti.start();
@@ -608,14 +616,7 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         }
         // we're good to go! kick off
         // Clean up!
-        const parent = root.parentElement;
-        if (parent === null) {
-            throw new Error("Can't have a null root...");
-        }
         root.remove();
-        const newRoot = document.createElement('div');
-        newRoot.id = 'root';
-        parent.appendChild(newRoot);
         if (confetti.isConfettiRunning()) {
             confetti.stop();
         }
