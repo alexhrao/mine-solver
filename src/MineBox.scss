@@ -48,12 +48,18 @@
         &.unknown {
             display: block;
         }
+        &:active {
+            background-color: darkgrey;
+        }
         * {
             display: none;
         }
         &.flagged * {
             --fa-secondary-color: red;
             display: block;
+        }
+        &:disabled {
+            cursor: none;
         }
         border: none;
         border-radius: 0;

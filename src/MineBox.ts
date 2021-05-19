@@ -2,14 +2,16 @@ import { Box } from './Box';
 import './MineBox.scss';
 
 export interface Handlers {
-    onclick: () => unknown;
-    onrclick: () => unknown;
+    onclickdown: (box: MineBox) => unknown;
+    onclickup: (box: MineBox) => unknown;
+    onrclick: (box: MineBox) => unknown;
 }
 
 export class MineBox {
     private container: HTMLDivElement;
     private contents: HTMLDivElement;
     private btn: HTMLButtonElement;
+    private disabled: boolean = false;
 
     constructor(private _box: Box, private readonly handlers: Handlers, public readonly parent: HTMLDivElement) {
         this.container = document.createElement('div');
@@ -34,25 +36,21 @@ export class MineBox {
             this.contents.textContent = `${_box.mines}`;
             this.contents.className = `b${_box.mines}`;
         }
-        this.btn.onclick = () => {
-            if (_box.flagged) {
+        this.btn.onmousedown = (e) => {
+            if (this.disabled) {
                 return;
             }
-            this.uncover();
-            this.handlers.onclick();
+            handlers.onclickdown(this);
         }
-
-        this.btn.oncontextmenu = (e) => {
-            // show the flag... oh boy, we get font awesome!
-            e.preventDefault();
-            if (this._box.flagged) {
-                this._box.flagged = false;
-                this.btn.classList.remove('flagged');
-            } else {
-                this._box.flagged = true;
-                this.btn.classList.add('flagged');
+        this.btn.onmouseup = (e) => {
+            if (this.disabled) {
+                return;
             }
-            this.handlers.onrclick();
+            if (e.shiftKey) {
+                handlers.onrclick(this);
+            } else {
+                handlers.onclickup(this);
+            }
         }
 
         this.container.appendChild(this.contents);
@@ -64,6 +62,10 @@ export class MineBox {
         return this._box;
     }
 
+    public click(): void {
+        this.handlers.onclickup(this);
+    }
+
     public cover(): void {
         this.btn.classList.add('unknown');
         this._box.isShown = false;
@@ -72,6 +74,25 @@ export class MineBox {
         this._box.isShown = true;
         this.btn.classList.remove('unknown');
     }
+
+    public flag(): void {
+        this._box.flagged = true;
+        this.btn.classList.add('flagged');
+    }
+    public unflag(): void {
+        this._box.flagged = false;
+        this.btn.classList.remove('flagged');
+    }
+
+    public disable(): void {
+        this.disabled = true;
+        this.btn.disabled = true;
+    }
+    public enable(): void {
+        this.disabled = false;
+        this.btn.disabled = false;
+    }
+
     public tooMany(tooMany: boolean = true): void {
         if (tooMany) {
             this.container.classList.add('too-many');

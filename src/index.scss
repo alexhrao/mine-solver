@@ -1,5 +1,76 @@
+#root {
+    width: fit-content;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+h1 {
+    text-align: center;
+}
 .game-board {
     display: grid;
     width: fit-content;
-    grid-template-columns: auto minmax(0,1fr);
+    &.disabled {
+        cursor: none;
+    }
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#indicator {
+    text-align: center;
+    font-size: 50px;
+    display: block;
+    height: 50px;
+}
+
+#undo {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+    color: black;
+    &:disabled {
+        color: darkgray;
+        cursor: not-allowed;
+    }
+}
+
+.menubar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+#newGameMenu {
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    h2 {
+        text-align: center;
+        margin-bottom: 0;
+    }
+    input {
+        width: 70px;
+        margin: 5px;
+        padding: 3px;
+    }
+    button {
+        margin-left: 10px;
+        padding: 5px;
+        background-color: lightgreen;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #errMsg {
+        color: salmon;
+        font-style: italic;
+    }
+}
+
+#statShower {
+    text-align: center;
 }

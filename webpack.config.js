@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: './src/index.ts',
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
@@ -27,7 +27,7 @@ module.exports = {
                   [
                     "autoprefixer",
                     {
-                      
+
                       // Options
                     },
                   ],
