@@ -10,6 +10,10 @@ script.src = 'https://kit.fontawesome.com/a927215a8a.js';
 script.crossOrigin = 'anonymous';
 document.head.appendChild(script);
 
+// load audio
+const audio = document.createElement('audio');
+audio.src = './vote_results.mp3';
+
 interface GameSeed {
     rows: number;
     cols: number;
@@ -68,12 +72,34 @@ function readBoard(payload: string): Box[][] {
     });
 }
 
-
+const SOUND_TIME = 20*1000;
 
 let exploded: MineBox|undefined;
 let finished: boolean = false;
 let gameFinisher: () => void = () => {};
 let timer: number = 0;
+
+function playMusic(): void {
+    audio.play()
+        .then(() => {
+            setTimeout(() => {
+                const fader = setInterval(() => {
+                    try {
+                        audio.volume -= 0.01;
+                        if (audio.volume <= 0) {
+                            audio.pause();
+                            audio.load();
+                            clearInterval(fader);
+                        }
+                    } catch (e) {
+                        audio.pause();
+                        audio.load();
+                        clearInterval(fader);
+                    }
+                }, 100);
+            }, SOUND_TIME);
+        });
+}
 
 function timeDiff(d1: Date, d2: Date): Timespan {
     const span: Timespan = {
@@ -629,6 +655,7 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
             statShower.textContent = finish;
             window.clearInterval(timer);
             confetti.start();
+            playMusic();
         }
 
         return true;
@@ -644,12 +671,12 @@ function makeNewGame(rows: number = 20, cols: number = 20, mines: number = 75) {
         const rows = parseInt(newGame.numRows.value);
         const cols = parseInt(newGame.numCols.value);
         const mines = parseInt(newGame.numMines.value);
-        if (isNaN(rows) || rows <= 6) {
+        if (isNaN(rows) || rows <= 5) {
             // Throw up error!
             newGame.errorMsg.textContent = 'Number of rows must be at least 6';
             return;
         }
-        if (isNaN(cols) || cols <= 0) {
+        if (isNaN(cols) || cols <= 5) {
             // throw
             newGame.errorMsg.textContent = 'Number of columns must be at least 6';
             return;
